@@ -800,6 +800,7 @@ public class Configuration {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public V put(String key, V value) {
       if (containsKey(key)) {
         //如果已经存在此key了，直接报错
