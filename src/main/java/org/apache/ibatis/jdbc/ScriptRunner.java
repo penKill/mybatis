@@ -44,6 +44,12 @@ public class ScriptRunner {
   private boolean autoCommit;
   private boolean sendFullScript;
   private boolean removeCRs;
+  /**
+   *   设置逃逸字符,查询相关文档后得出结论为
+   *   % 或者 _ 这种sql关键字符是按照关键字还是按照原处理
+   *   可参考关键字escape
+   */
+
   private boolean escapeProcessing = true;
 
   private PrintWriter logWriter = new PrintWriter(System.out);
@@ -181,7 +187,7 @@ public class ScriptRunner {
       // ignore
     }
   }
-
+  //最后有没有执行的sql 且非;结尾的sql 做检查处理
   private void checkForMissingLineTerminator(StringBuilder command) {
     if (command != null && command.toString().trim().length() > 0) {
       throw new RuntimeSqlException("Line missing end-of-line terminator (" + delimiter + ") => " + command);

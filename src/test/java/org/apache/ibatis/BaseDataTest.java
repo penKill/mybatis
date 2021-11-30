@@ -28,9 +28,11 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public abstract class BaseDataTest {
-
+  //连接数据库的用户名密码信息
   public static final String BLOG_PROPERTIES = "org/apache/ibatis/databases/blog/blog-derby.properties";
+  //创建sql的表语句
   public static final String BLOG_DDL = "org/apache/ibatis/databases/blog/blog-derby-schema.sql";
+  //插入的sql语句
   public static final String BLOG_DATA = "org/apache/ibatis/databases/blog/blog-derby-dataload.sql";
 
   public static final String JPETSTORE_PROPERTIES = "org/apache/ibatis/databases/jpetstore/jpetstore-hsqldb.properties";
