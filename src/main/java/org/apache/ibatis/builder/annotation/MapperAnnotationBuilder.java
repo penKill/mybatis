@@ -136,6 +136,7 @@ public class MapperAnnotationBuilder {
       } catch (IOException e) {
         // ignore, resource is not required
       }
+      // 一个文件解析的晚餐的内容全部放在一个
       if (inputStream != null) {
         // inputStream : xml文件
         // assistant.getConfiguration() : xml解析助手

@@ -29,7 +29,7 @@ import org.apache.ibatis.session.Configuration;
  */
 /**
  * 结果映射
- * MyBatis 中最重要最强大的元素
+ * MyBatis 最强的元素集合
  */
 public class ResultMap {
   private String id;

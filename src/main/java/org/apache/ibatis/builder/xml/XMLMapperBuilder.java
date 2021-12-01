@@ -289,8 +289,8 @@ public class XMLMapperBuilder extends BaseBuilder {
   }
 
   //5.1 配置resultMap
-  private ResultMap resultMapElement(XNode resultMapNode) throws Exception {
-    return resultMapElement(resultMapNode, Collections.<ResultMapping> emptyList());
+  private void resultMapElement(XNode resultMapNode) throws Exception {
+    resultMapElement(resultMapNode, Collections.emptyList());
   }
 
   //5.1 配置resultMap
@@ -356,7 +356,7 @@ public class XMLMapperBuilder extends BaseBuilder {
   private void processConstructorElement(XNode resultChild, Class<?> resultType, List<ResultMapping> resultMappings) throws Exception {
     List<XNode> argChildren = resultChild.getChildren();
     for (XNode argChild : argChildren) {
-      List<ResultFlag> flags = new ArrayList<ResultFlag>();
+      List<ResultFlag> flags = new ArrayList<>();
       //结果标志加上ID和CONSTRUCTOR
       flags.add(ResultFlag.CONSTRUCTOR);
       if ("idArg".equals(argChild.getName())) {

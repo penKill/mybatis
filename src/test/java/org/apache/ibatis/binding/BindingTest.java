@@ -54,7 +54,7 @@ public class BindingTest {
     configuration.getTypeAliasRegistry().registerAlias(Post.class);
     configuration.getTypeAliasRegistry().registerAlias(Author.class);
     configuration.addMapper(BoundBlogMapper.class);
-    configuration.addMapper(BoundAuthorMapper.class);
+//    configuration.addMapper(BoundAuthorMapper.class);
     sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
   }
 
