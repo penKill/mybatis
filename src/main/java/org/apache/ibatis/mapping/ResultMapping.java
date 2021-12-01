@@ -33,13 +33,31 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
  * MyBatis 中最重要最强大的元素
  */
 public class ResultMapping {
-
+  /**
+   * 配置文件
+   */
   private Configuration configuration;
+  /**
+   *
+   */
   private String property;
+  /**
+   * 列
+   */
   private String column;
+  /**
+   * 对应的javaType
+   */
   private Class<?> javaType;
+  /**
+   * 对应的jdbcType
+   */
   private JdbcType jdbcType;
+  /**
+   * 对应处理的TypeHandler
+   */
   private TypeHandler<?> typeHandler;
+
   private String nestedResultMapId;
   private String nestedQueryId;
   private Set<String> notNullColumns;

@@ -138,9 +138,10 @@ public class MapperAnnotationBuilder {
       }
       if (inputStream != null) {
         // inputStream : xml文件
-        // assistant.getConfiguration() : 该xml解析助手
-        // xmlResource : 该xml的位置信息
-        //
+        // assistant.getConfiguration() : xml解析助手
+        // xmlResource : xml的位置信息
+        //configuration.getSqlFragments() xml的解析结果
+        //.java类对应的全类名称
         XMLMapperBuilder xmlParser = new XMLMapperBuilder(inputStream, assistant.getConfiguration(), xmlResource, configuration.getSqlFragments(), type.getName());
         xmlParser.parse();
       }

@@ -237,6 +237,13 @@ public class XNode {
     return getStringAttribute(name, null);
   }
 
+  /**
+   * 解析xml的时候 获取name值
+   * 当name==null 返回def值
+   * @param name
+   * @param def
+   * @return
+   */
   public String getStringAttribute(String name, String def) {
     String value = attributes.getProperty(name);
     if (value == null) {

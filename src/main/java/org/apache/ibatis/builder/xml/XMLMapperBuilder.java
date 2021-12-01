@@ -15,37 +15,20 @@
  */
 package org.apache.ibatis.builder.xml;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.ibatis.builder.BaseBuilder;
-import org.apache.ibatis.builder.BuilderException;
-import org.apache.ibatis.builder.CacheRefResolver;
-import org.apache.ibatis.builder.IncompleteElementException;
-import org.apache.ibatis.builder.MapperBuilderAssistant;
-import org.apache.ibatis.builder.ResultMapResolver;
+import org.apache.ibatis.builder.*;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.mapping.Discriminator;
-import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.ibatis.mapping.ParameterMode;
-import org.apache.ibatis.mapping.ResultFlag;
-import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.mapping.ResultMapping;
+import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.parsing.XPathParser;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
+
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.*;
 
 /**
  * @author Clinton Begin
@@ -72,17 +55,23 @@ public class XMLMapperBuilder extends BaseBuilder {
   @Deprecated
   public XMLMapperBuilder(Reader reader, Configuration configuration, String resource, Map<String, XNode> sqlFragments) {
     this(new XPathParser(reader, true, configuration.getVariables(), new XMLMapperEntityResolver()),
-        configuration, resource, sqlFragments);
+            configuration, resource, sqlFragments);
   }
 
+  // inputStream : xml文件
+  // assistant.getConfiguration() : xml解析助手
+  // xmlResource : xml的位置信息
+  //configuration.getSqlFragments() xml的解析结果
+  //.java类对应的全类名称
   public XMLMapperBuilder(InputStream inputStream, Configuration configuration, String resource, Map<String, XNode> sqlFragments, String namespace) {
+    //调用别的构造方法
     this(inputStream, configuration, resource, sqlFragments);
     this.builderAssistant.setCurrentNamespace(namespace);
   }
 
   public XMLMapperBuilder(InputStream inputStream, Configuration configuration, String resource, Map<String, XNode> sqlFragments) {
     this(new XPathParser(inputStream, true, configuration.getVariables(), new XMLMapperEntityResolver()),
-        configuration, resource, sqlFragments);
+            configuration, resource, sqlFragments);
   }
 
   private XMLMapperBuilder(XPathParser parser, Configuration configuration, String resource, Map<String, XNode> sqlFragments) {
@@ -130,7 +119,7 @@ public class XMLMapperBuilder extends BaseBuilder {
       }
       builderAssistant.setCurrentNamespace(namespace);
       //2.配置cache-ref
-      cacheRefElement(context.evalNode("cache-ref"));
+      cacheRefElement(context.evalNode("cache-ref"), namespace);
       //3.配置cache
       cacheElement(context.evalNode("cache"));
       //4.配置parameterMap(已经废弃,老式风格的参数映射)
@@ -218,11 +207,11 @@ public class XMLMapperBuilder extends BaseBuilder {
 
   //2.配置cache-ref,在这样的 情况下你可以使用 cache-ref 元素来引用另外一个缓存。 
 //<cache-ref namespace="com.someone.application.data.SomeMapper"/>
-  private void cacheRefElement(XNode context) {
+  private void cacheRefElement(XNode context, String namespace) {
     if (context != null) {
       //增加cache-ref
-      configuration.addCacheRef(builderAssistant.getCurrentNamespace(), context.getStringAttribute("namespace"));
-      CacheRefResolver cacheRefResolver = new CacheRefResolver(builderAssistant, context.getStringAttribute("namespace"));
+      configuration.addCacheRef(builderAssistant.getCurrentNamespace(), namespace);
+      CacheRefResolver cacheRefResolver = new CacheRefResolver(builderAssistant, namespace);
       try {
         cacheRefResolver.resolveCacheRef();
       } catch (IncompleteElementException e) {
@@ -328,9 +317,10 @@ public class XMLMapperBuilder extends BaseBuilder {
     String extend = resultMapNode.getStringAttribute("extends");
     //autoMapping
     Boolean autoMapping = resultMapNode.getBooleanAttribute("autoMapping");
+    //从类型映射中查询出具体的映射逻辑
     Class<?> typeClass = resolveClass(type);
     Discriminator discriminator = null;
-    List<ResultMapping> resultMappings = new ArrayList<ResultMapping>();
+    List<ResultMapping> resultMappings = new ArrayList<>();
     resultMappings.addAll(additionalResultMappings);
     List<XNode> resultChildren = resultMapNode.getChildren();
     for (XNode resultChild : resultChildren) {
@@ -341,7 +331,7 @@ public class XMLMapperBuilder extends BaseBuilder {
         //解析result map的discriminator
         discriminator = processDiscriminatorElement(resultChild, typeClass, resultMappings);
       } else {
-        List<ResultFlag> flags = new ArrayList<ResultFlag>();
+        List<ResultFlag> flags = new ArrayList<>();
         if ("id".equals(resultChild.getName())) {
           flags.add(ResultFlag.ID);
         }

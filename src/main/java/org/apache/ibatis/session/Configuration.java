@@ -821,7 +821,7 @@ public class Configuration {
       return super.put(key, value);
       //可以看到，如果有包名，会放2个key到这个map，一个缩略，一个全名
     }
-
+    @Override
     public V get(Object key) {
       V value = super.get(key);
       //如果找不到相应的key，直接报错

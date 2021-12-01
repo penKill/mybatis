@@ -101,7 +101,7 @@ public class MapperRegistry {
    */
   public void addMappers(String packageName, Class<?> superType) {
     //查找包下所有是superType的类
-    ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<Class<?>>();
+    ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<>();
     resolverUtil.find(new ResolverUtil.IsA(superType), packageName);
     Set<Class<? extends Class<?>>> mapperSet = resolverUtil.getClasses();
     for (Class<?> mapperClass : mapperSet) {
