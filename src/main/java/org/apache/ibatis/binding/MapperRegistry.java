@@ -39,7 +39,7 @@ public class MapperRegistry {
 
   private Configuration config;
   //将已经添加的映射都放入HashMap
-  private final Map<Class<?>, MapperProxyFactory<?>> knownMappers = new HashMap<Class<?>, MapperProxyFactory<?>>();
+  private final Map<Class<?>, MapperProxyFactory<?>> knownMappers = new HashMap<>();
 
   public MapperRegistry(Configuration config) {
     this.config = config;

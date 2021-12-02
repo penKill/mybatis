@@ -135,11 +135,11 @@ public class Configuration {
   //映射的语句,存在Map里
   protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection");
   //缓存,存在Map里
-  protected final Map<String, Cache> caches = new StrictMap<Cache>("Caches collection");
+  protected final Map<String, Cache> caches = new StrictMap<>("Caches collection");
   //结果映射,存在Map里
-  protected final Map<String, ResultMap> resultMaps = new StrictMap<ResultMap>("Result Maps collection");
-  protected final Map<String, ParameterMap> parameterMaps = new StrictMap<ParameterMap>("Parameter Maps collection");
-  protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<KeyGenerator>("Key Generators collection");
+  protected final Map<String, ResultMap> resultMaps = new StrictMap<>("Result Maps collection");
+  protected final Map<String, ParameterMap> parameterMaps = new StrictMap<>("Parameter Maps collection");
+  protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<>("Key Generators collection");
   /**
    * 解析完成的mapper.xml包含标记存放的文件
    */
@@ -553,6 +553,8 @@ public class Configuration {
 
   public void addResultMap(ResultMap rm) {
     resultMaps.put(rm.getId(), rm);
+    //这2个方法的代码没看懂
+    //貌似是为了处理嵌套resultMap或者处理处理鉴别器
     checkLocallyForDiscriminatedNestedResultMaps(rm);
     checkGloballyForDiscriminatedNestedResultMaps(rm);
   }
@@ -762,7 +764,7 @@ public class Configuration {
     if (!rm.hasNestedResultMaps() && rm.getDiscriminator() != null) {
       for (Map.Entry<String, String> entry : rm.getDiscriminator().getDiscriminatorMap().entrySet()) {
         String discriminatedResultMapName = entry.getValue();
-        if (hasResultMap(discriminatedResultMapName)) {
+        if (this.hasResultMap(discriminatedResultMapName)) {
           ResultMap discriminatedResultMap = resultMaps.get(discriminatedResultMapName);
           if (discriminatedResultMap.hasNestedResultMaps()) {
             rm.forceNestedResultMaps();

@@ -45,7 +45,7 @@ public class BindingTest {
     BaseDataTest.runScript(dataSource, BaseDataTest.BLOG_DDL);
     //初始化表中的数据
     BaseDataTest.runScript(dataSource, BaseDataTest.BLOG_DATA);
-
+    //在spring框架中这部分由spring来管理注入
     TransactionFactory transactionFactory = new JdbcTransactionFactory();
     Environment environment = new Environment("Production", transactionFactory, dataSource);
     Configuration configuration = new Configuration(environment);
@@ -54,7 +54,7 @@ public class BindingTest {
     configuration.getTypeAliasRegistry().registerAlias(Post.class);
     configuration.getTypeAliasRegistry().registerAlias(Author.class);
     configuration.addMapper(BoundBlogMapper.class);
-//    configuration.addMapper(BoundAuthorMapper.class);
+    configuration.addMapper(BoundAuthorMapper.class);
     sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
   }
 

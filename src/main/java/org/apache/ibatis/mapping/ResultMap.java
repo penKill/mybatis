@@ -40,6 +40,9 @@ public class ResultMap {
   private List<ResultMapping> propertyResultMappings;
   private Set<String> mappedColumns;
   private Discriminator discriminator;
+  /**
+   * 是否有嵌套的resultMap
+   */
   private boolean hasNestedResultMaps;
   private boolean hasNestedQueries;
   private Boolean autoMapping;
