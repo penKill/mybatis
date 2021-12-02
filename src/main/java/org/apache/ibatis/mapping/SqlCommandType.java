@@ -20,7 +20,7 @@ package org.apache.ibatis.mapping;
  */
 /**
  * SQL命令类型
- *
+ * 这里缺少一些ddl的类型啊
  */
 public enum SqlCommandType {
   UNKNOWN, INSERT, UPDATE, DELETE, SELECT;

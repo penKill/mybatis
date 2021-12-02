@@ -15,12 +15,12 @@
  */
 package org.apache.ibatis.mapping;
 
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.session.Configuration;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.session.Configuration;
 
 /**
  * An actual SQL String got form an {@link SqlSource} after having processed any dynamic content.
@@ -75,5 +75,42 @@ public class BoundSql {
 
   public Object getAdditionalParameter(String name) {
     return metaParameters.getValue(name);
+  }
+
+  /**
+   * 获取完整的sql
+   *
+   * @return
+   */
+  public String formatSql(Object parameter) {
+    return formatSql(this.sql, parameter);
+  }
+
+  /**
+   * 获取完整的sql
+   *
+   * @return
+   */
+  public String formatSql(String sql, Object parameter) {
+    if (parameter instanceof String) {
+      return sql.replace("?", "'" + parameter.toString() + "'");
+
+    } else {
+      return sql.replace("?", parameter.toString());
+    }
+  }
+
+  /**
+   * 多个sql
+   *
+   * @param parameters
+   * @return
+   */
+  public String formatSql(Object[] parameters) {
+    String formatSql = this.sql;
+    for (Object parameter : parameters) {
+      formatSql = this.formatSql(formatSql, parameter);
+    }
+    return formatSql;
   }
 }

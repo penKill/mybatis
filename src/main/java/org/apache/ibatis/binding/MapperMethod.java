@@ -226,10 +226,13 @@ public class MapperMethod {
 
   //方法签名，静态内部类
   public static class MethodSignature {
-
+    //返回多列
     private final boolean returnsMany;
+    //返回Map
     private final boolean returnsMap;
+    //无返回值
     private final boolean returnsVoid;
+    //返回的具体类型
     private final Class<?> returnType;
     private final String mapKey;
     private final Integer resultHandlerIndex;

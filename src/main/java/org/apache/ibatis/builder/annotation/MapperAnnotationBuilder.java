@@ -389,8 +389,17 @@ public class MapperAnnotationBuilder {
     return returnType;
   }
 
+  /**
+   * 根据mapper获取到对应的sql语法信息
+   *
+   * @param method         mapper对应的方法
+   * @param parameterType  mapper对应的参数类型
+   * @param languageDriver 框架整个的语言是以什么为末班
+   * @return
+   */
   private SqlSource getSqlSourceFromAnnotations(Method method, Class<?> parameterType, LanguageDriver languageDriver) {
     try {
+      //获取到方法上的@Select这种注解
       Class<? extends Annotation> sqlAnnotationType = getSqlAnnotationType(method);
       Class<? extends Annotation> sqlProviderAnnotationType = getSqlProviderAnnotationType(method);
       if (sqlAnnotationType != null) {
@@ -419,6 +428,12 @@ public class MapperAnnotationBuilder {
     return languageDriver.createSqlSource(configuration, sql.toString(), parameterTypeClass);
   }
 
+  /**
+   * 获取该方法对应的
+   *
+   * @param method
+   * @return
+   */
   private SqlCommandType getSqlCommandType(Method method) {
     Class<? extends Annotation> type = getSqlAnnotationType(method);
 

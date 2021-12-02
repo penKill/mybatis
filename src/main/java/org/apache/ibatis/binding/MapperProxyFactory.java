@@ -15,22 +15,28 @@
  */
 package org.apache.ibatis.binding;
 
+import org.apache.ibatis.session.SqlSession;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.ibatis.session.SqlSession;
-
 /**
  * @author Lasse Voss
  */
+
 /**
  * 映射器代理工厂
  */
 public class MapperProxyFactory<T> {
-
+  /**
+   * 当前这个mapper的class类型
+   */
   private final Class<T> mapperInterface;
+  /**
+   * 当前这个类的
+   */
   private Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<Method, MapperMethod>();
 
   public MapperProxyFactory(Class<T> mapperInterface) {
