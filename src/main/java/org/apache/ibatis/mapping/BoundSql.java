@@ -17,6 +17,7 @@ package org.apache.ibatis.mapping;
 
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.defaults.DefaultSqlSession;
 
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +84,7 @@ public class BoundSql {
    * @return
    */
   public String formatSql(Object parameter) {
-    return formatSql(this.sql, parameter);
+    return formatSql(this.sql.replace("\n", ""), parameter);
   }
 
   /**
@@ -92,25 +93,52 @@ public class BoundSql {
    * @return
    */
   public String formatSql(String sql, Object parameter) {
-    if (parameter instanceof String) {
-      return sql.replace("?", "'" + parameter.toString() + "'");
+    if (parameter instanceof DefaultSqlSession.StrictMap) {
+      String newSql = sql;
 
-    } else {
-      return sql.replace("?", parameter.toString());
+      DefaultSqlSession.StrictMap strictMap = (DefaultSqlSession.StrictMap) parameter;
+      for (Object key : strictMap.keySet()) {
+        if ("collection".equals(key) || "list".equals(key) || "array".equals(key)) {
+          Object value = strictMap.get(key);
+          if (value instanceof List) {
+            for (Object val : (List) value) {
+              newSql = this.formatFirstSql(newSql, val);
+            }
+          } else if (value.getClass().isArray()) {
+            if (value.toString().contains("Integer")) {
+              Integer[] newValue = (Integer[]) value;
+              for (Integer v : newValue) {
+                newSql = this.formatFirstSql(newSql, v);
+              }
+
+            } else {
+
+            }
+          }
+        }
+      }
+      return newSql;
+
     }
+    return this.formatFirstSql(sql, parameter);
   }
 
   /**
-   * 多个sql
+   * 提交第一个问号
    *
-   * @param parameters
+   * @param sql
+   * @param parameter
    * @return
    */
-  public String formatSql(Object[] parameters) {
-    String formatSql = this.sql;
-    for (Object parameter : parameters) {
-      formatSql = this.formatSql(formatSql, parameter);
+  public String formatFirstSql(String sql, Object parameter) {
+    if (!sql.contains("?")) {
+      return sql;
     }
-    return formatSql;
+    if (parameter instanceof String) {
+      return sql.replaceFirst("\\?", "'" + parameter.toString() + "'");
+
+    }
+    return sql.replaceFirst("\\?", parameter.toString());
   }
+
 }
